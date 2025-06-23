@@ -21,7 +21,8 @@ import {
     AppTopbarRef,
     MenuModelItem,
     AppMenuItemProps,
-    AppMenuItem
+    AppMenuItem, 
+    Projeto
 } from './layout';
 import { Demo, LayoutType, SortOrderType, CustomEvent, ChartDataState, ChartOptionsState, AppMailSidebarItem, AppMailReplyProps, AppMailProps } from './demo';
 
