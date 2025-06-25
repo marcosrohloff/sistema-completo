@@ -28,7 +28,7 @@ const Usuario = () => {
     const [deleteUsuarioDialog, setDeleteUsuarioDialog] = useState(false);
     const [deleteUsuariosDialog, setDeleteUsuariosDialog] = useState(false);
     const [usuario, setUsuario] = useState<Projeto.Usuario>(usuarioVazio);
-    const [selectedUsuarios, setSelectedUsuarios] = useState(null);
+    const [selectedUsuarios, setSelectedUsuarios] = useState<Projeto.Usuario[]>([]);
     const [submitted, setSubmitted] = useState(false);
     const [globalFilter, setGlobalFilter] = useState('');
     const toast = useRef<Toast>(null);
@@ -84,7 +84,7 @@ const Usuario = () => {
                 toast.current?.show({
                     severity: 'error',
                     summary: 'Erro!',
-                    detail: 'Erro ao salvar!' + error.data.message
+                    detail: 'Erro ao salvar!' + error.data
                 })
             });
         } else {
@@ -102,43 +102,11 @@ const Usuario = () => {
                 toast.current?.show({
                     severity: 'error',
                     summary: 'Erro!',
-                    detail: 'Erro ao alterar!' + error.data.message
+                    detail: 'Erro ao alterar!' + error.data
                 })
             })
         }
 
-        /*
-        if (product.name.trim()) {
-            let _products = [...(products as any)];
-            let _product = { ...product };
-            if (product.id) {
-                const index = findIndexById(product.id);
-
-                _products[index] = _product;
-                toast.current?.show({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'Product Updated',
-                    life: 3000
-                });
-            } else {
-                _product.id = createId();
-                _product.image = 'product-placeholder.svg';
-                _products.push(_product);
-                toast.current?.show({
-                    severity: 'success',
-                    summary: 'Successful',
-                    detail: 'Product Created',
-                    life: 3000
-                });
-            }
-
-            setProducts(_products as any);
-            setProductDialog(false);
-            setProduct(emptyProduct);
-            
-        }
-            */
     };
         
     const editUsuario = (usuario: Projeto.Usuario) => {
@@ -173,28 +141,6 @@ const Usuario = () => {
             });
         }
     };
-/*
-    const findIndexById = (id: string) => {
-        let index = -1;
-        for (let i = 0; i < (products as any)?.length; i++) {
-            if ((products as any)[i].id === id) {
-                index = i;
-                break;
-            }
-        }
-
-        return index;
-    };
-
-    const createId = () => {
-        let id = '';
-        let chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-        for (let i = 0; i < 5; i++) {
-            id += chars.charAt(Math.floor(Math.random() * chars.length));
-        }
-        return id;
-    };
-    */
 
     const exportCSV = () => {
         dt.current?.exportCSV();
@@ -205,27 +151,32 @@ const Usuario = () => {
     };
 
     const deleteSelectedUsuarios = () => {
-        /*
-        let _products = (products as any)?.filter((val: any) => !(selectedProducts as any)?.includes(val));
-        setProducts(_products);
-        setDeleteProductsDialog(false);
-        setSelectedProducts(null);
-        toast.current?.show({
-            severity: 'success',
-            summary: 'Successful',
-            detail: 'Products Deleted',
-            life: 3000
-        });
-        */
+
+        Promise.all(selectedUsuarios.map(async (_usuario) => {
+            if (_usuario.id) {
+                await usuarioService.excluir(_usuario.id);
+            }
+        })).then((response) => {
+            setUsuarios(null);
+            setSelectedUsuarios([]);
+            setDeleteUsuariosDialog(false);
+            toast.current?.show({
+                severity: 'success',
+                summary: 'Sucesso!',
+                detail: 'Usuários Deletados com Sucesso!',
+                life: 3000
+            });
+        }).catch((error) => {
+            toast.current?.show({
+                severity: 'error',
+                summary: 'Erro!',
+                detail: 'Erro ao deletar usuários!',
+                life: 3000
+            })
+        });        
+
     };
 
-    /*
-    const onCategoryChange = (e: RadioButtonChangeEvent) => {
-        let _product = { ...product };
-        _product['category'] = e.value;
-        setProduct(_product);
-    };
-*/
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name: string) => {
         const val = (e.target && e.target.value) || '';
         let _usuario = { ...usuario };
@@ -233,15 +184,6 @@ const Usuario = () => {
 
         setUsuario(_usuario);
     };
-    /*
-    const onInputNumberChange = (e: InputNumberValueChangeEvent, name: string) => {
-        const val = e.value || 0;
-        let _product = { ...product };
-        _product[`${name}`] = val;
-
-        setProduct(_product);
-    };
-    */
 
     const leftToolbarTemplate = () => {
         return (
