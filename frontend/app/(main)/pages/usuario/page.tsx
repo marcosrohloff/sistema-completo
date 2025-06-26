@@ -179,10 +179,14 @@ const Usuario = () => {
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, name: string) => {
         const val = (e.target && e.target.value) || '';
-        let _usuario = { ...usuario };
+        /*let _usuario = { ...usuario };
         _usuario[`${name}`] = val;
+        setUsuario(_usuario);*/
 
-        setUsuario(_usuario);
+        setUsuario(prevUsuario => ({
+            ...prevUsuario,
+            [name]: val,
+        }));        
     };
 
     const leftToolbarTemplate = () => {
