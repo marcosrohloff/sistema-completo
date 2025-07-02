@@ -1,6 +1,7 @@
 package br.com.apibackend.entity;
 
 import br.com.apibackend.dto.PermissaoPerfilRecursoDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,7 +31,7 @@ public class PermissaoPerfilRecursoEntity {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "ID_PERFIL")
     private PerfilEntity perfil;
 
