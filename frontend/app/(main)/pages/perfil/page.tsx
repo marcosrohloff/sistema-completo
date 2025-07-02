@@ -187,7 +187,7 @@ const Perfil = () => {
 
     const leftToolbarTemplate = () => {
         return (
-            <React.Fragment>
+            <React.Fragment>    
                 <div className="my-2">
                     <Button label="Novo" icon="pi pi-plus" severity="success" className=" mr-2" onClick={openNew} />
                     <Button label="Excluir" icon="pi pi-trash" severity="danger" onClick={confirmDeleteSelected} disabled={!selectedPerfis || !(selectedPerfis as any).length} />
