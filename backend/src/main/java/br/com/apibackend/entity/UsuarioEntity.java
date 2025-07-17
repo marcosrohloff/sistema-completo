@@ -38,7 +38,7 @@ public class UsuarioEntity {
     private String email;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = true)
+    @Column(nullable = false)
     private TipoSituacaoUsuario situacao;
 
     public UsuarioEntity() {

@@ -1,6 +1,7 @@
 package br.com.apibackend.security;
 
 import br.com.apibackend.security.jwt.AuthEntryPointJwt;
+import br.com.apibackend.security.jwt.AuthFilterToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,19 +38,23 @@ public class WebSecurityConfig {
     }
 
     @Bean
+    public AuthFilterToken authFilterToken() {
+        return new AuthFilterToken();
+    }
+
+    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        
+
         http.cors(Customizer.withDefaults());
         http.csrf(csrf -> csrf.disable())
                 .exceptionHandling(exception -> exception.authenticationEntryPoint(unauthorizedHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**")
-                        .permitAll()
-                        .requestMatchers("/usuario/**")
-                        .permitAll().anyRequest().authenticated());
-        
-        //http.addFilterBefore(authFilterToken(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();        
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/usuario/**").permitAll()
+                .anyRequest().authenticated());
+
+        http.addFilterBefore(authFilterToken(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
     }
 
 }

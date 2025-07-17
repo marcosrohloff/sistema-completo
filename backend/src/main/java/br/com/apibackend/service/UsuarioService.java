@@ -5,6 +5,7 @@ import br.com.apibackend.entity.UsuarioEntity;
 import br.com.apibackend.repository.UsuarioRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -13,10 +14,13 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UsuarioService {
-    
+
     @Autowired
     private UsuarioRepository usuarioRepository;
-    
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public List<UsuarioDTO> listarTodos() {
         List<UsuarioEntity> usuarios = usuarioRepository.findAll();
         return usuarios.stream().map(UsuarioDTO::new).toList();
@@ -24,19 +28,21 @@ public class UsuarioService {
 
     public void inserir(UsuarioDTO usuario) {
         UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
+        usuarioEntity.setSenha(passwordEncoder.encode(usuario.getSenha()));
         usuarioRepository.save(usuarioEntity);
     }
-    
+
     public UsuarioDTO alterar(UsuarioDTO usuario) {
         UsuarioEntity usuarioEntity = new UsuarioEntity(usuario);
+        usuarioEntity.setSenha(passwordEncoder.encode(usuario.getSenha()));        
         return new UsuarioDTO(usuarioRepository.save(usuarioEntity));
     }
-    
+
     public void excluir(Long id) {
         UsuarioEntity usuario = usuarioRepository.findById(id).get();
         usuarioRepository.delete(usuario);
     }
-    
+
     public UsuarioDTO buscarPorId(Long id) {
         return new UsuarioDTO(usuarioRepository.findById(id).get());
     }

@@ -17,11 +17,11 @@ public class UsuarioDTO {
     private String email;
     private TipoSituacaoUsuario situacao;
 
-    public UsuarioDTO() {
-    }
-
     public UsuarioDTO(UsuarioEntity usuario) {
         BeanUtils.copyProperties(usuario, this);
+    }
+
+    public UsuarioDTO() {
     }
 
     public Long getId() {

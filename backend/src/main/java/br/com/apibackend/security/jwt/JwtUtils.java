@@ -27,8 +27,8 @@ public class JwtUtils {
     @Value("${projeto.jwtExpirationMs}")
     private int jwtExpirationMs;
 
-    public String generateTokenFromUserDetailsImpl(UserDetailsImpl userDetailsImpl) {
-        return Jwts.builder().setSubject(userDetailsImpl.getUsername())
+    public String generateTokenFromUserDetailsImpl(UserDetailsImpl userDetail) {
+        return Jwts.builder().setSubject(userDetail.getUsername())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(new Date().getTime() + jwtExpirationMs))
                 .signWith(getSigninKey(), SignatureAlgorithm.HS512).compact();
