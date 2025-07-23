@@ -20,6 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  *
  * @author marcosrohloff
  */
+
 @Configuration
 @EnableMethodSecurity
 public class WebSecurityConfig {
